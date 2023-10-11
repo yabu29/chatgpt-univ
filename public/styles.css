@@ -1,0 +1,131 @@
+/* スタイルシート: styles.css */
+
+/* 全体のレイアウトとデザイン */
+body, html {
+  font-family: Arial, sans-serif;
+  background-color: #f5f5f5;
+  color: #333;
+  line-height: 1.6;
+  height: 100%;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start; /* トップにコンテンツを揃えます */
+  padding-top: 20px; /* トップに少しスペースを持たせます */
+  max-width: 800px; /* bodyの最大幅を800pxに設定 */
+  margin: 0 auto; /* bodyを中央に配置 */
+  overflow-x: hidden; /* 水平方向のスクロールを無効にする */
+}
+
+.container {
+  max-width: 800px;
+  width: calc(100% - 40px); /* 両側のマージンを考慮した幅を設定 */
+  margin: 20px;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  box-sizing: border-box; /* paddingとborderがwidthに含まれるようにします */
+}
+
+h1 {
+  text-align: center;
+  color: #333;
+}
+
+.input-group {
+  margin-bottom: 20px;
+}
+
+input[type="text"],
+textarea {
+  width: calc(100% - 20px); /* paddingを考慮した幅を設定 */
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+input[type="text"]:focus,
+textarea:focus {
+  outline: none;
+  border-color: #9ecaed;
+  box-shadow: 0 0 10px #9ecaed;
+}
+
+textarea {
+  min-height: 120px; /* 適切な読み取り可能な高さを持たせます */
+  resize: vertical; /* 垂直方向のリサイズのみ許可します */
+}
+
+button {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  background-color: #28a745;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+button:hover {
+  background-color: #218838;
+}
+
+.required {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  margin-top: -20px;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.required::after {
+  content: "*"; /* 必須を示す一般的なアスタリスクに変更 */
+  color: red; /* 視覚的な注目を集めるための色 */
+  margin-left: 5px; /* ラベルからのスペース */
+}
+
+.output-section {
+  margin-top: 40px;
+  border-top: 1px solid #ddd;
+  padding-top: 20px;
+}
+
+.output-section, .error {
+  width: 100%; /* 親要素の幅いっぱいに広がるようにします */
+  box-sizing: border-box; /* paddingとborderがwidthに含まれるようにします */
+  text-align: center; /* テキストを中央揃えにします */
+}
+
+.error {
+  color: #ff4757;
+  font-weight: bold;
+}
+
+.input-field, textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd; /* 明確な境界線を提供 */
+  border-radius: 5px; /* 角を丸くする */
+  background-color: white; /* inputとtextareaの背景色を白に設定 */
+  font-family: Arial, sans-serif; /* フォントを指定（システムに依存しない） */
+  font-size: 16px; /* フォントサイズを指定 */
+  color: #333; /* テキストの色を指定 */
+  box-sizing: border-box; /* paddingとborderを要素のサイズに含める */
+}
+
+.input-field:focus, textarea:focus {
+  outline: none;
+  border-color: #9ecaed;
+  box-shadow: 0 0 10px #9ecaed;
+}
+
+p {
+  word-break: break-word; /* 単語が境界に達したときに折り返す */
+  text-align: left; /* pタグ内のテキストを左揃えにする */
+  margin: 0; /* pタグのデフォルトマージンを解除する */
+  padding: 0; /* 必要に応じてパディングを解除する */
+}
