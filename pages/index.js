@@ -9,9 +9,11 @@ export default function Home() {
   const [feedback, setFeedback] = useState('');
   const [outputText, setOutputText] = useState('');
   const [error, setError] = useState('');
-  const [showFeedback, setShowFeedback] = useState(false); // フィードバック入力フィールドの表示管理用
+  const [isLoading, setIsLoading] = useState(false); // APIレスポンス待ちの状態管理
+  const [showFeedback, setShowFeedback] = useState(false);
 
   const handleButtonClick = async () => {
+    setIsLoading(true); // ロード状態に設定
     setError('');
     let system_message = `あなたの役割は${role}です。\n\n #命令文\n${command}\n\n#制約条件\n${constraint}\n\n入力文\n${inputText}`;
 
@@ -21,7 +23,7 @@ export default function Home() {
 
     const requestBody = {
       system_message,
-      user_message: inputText, // this can be included if the API requires it
+      user_message: inputText,
     };
 
     const response = await fetch('/api/summary', {
@@ -33,12 +35,13 @@ export default function Home() {
     });
 
     const data = await response.json();
+    setIsLoading(false); // ロード状態を解除
 
     if (!response.ok) {
       setError(data.error);
     } else {
       setOutputText(data.text);
-      setShowFeedback(true); // 初回のレスポンス後、フィードバック入力フィールドを表示
+      setShowFeedback(true);
     }
   };
 
@@ -50,7 +53,7 @@ export default function Home() {
       </Head>
       <h1>ChatGPT｜深津式プロンプト</h1>
       <div className="input-group">
-      <input 
+        <input 
           type="text" 
           value={role} 
           onChange={(e) => setRole(e.target.value)} 
@@ -86,11 +89,11 @@ export default function Home() {
         )}
       </div>
       <div className="input-group">
-        <button onClick={handleButtonClick}>送信</button>
+        <button className="button" onClick={handleButtonClick}>送信</button>
       </div>
       <div className="output-section">
         {error && <p className="error">{error}</p>}
-        <p>{outputText}</p>
+        <p>{isLoading ? '現在、レスポンス待ちです' : outputText}</p>
       </div>
     </div>
   );
