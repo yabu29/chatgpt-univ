@@ -1,6 +1,6 @@
 // APIリクエストを行う独自の関数
 async function createChatCompletion(system_message, user_message) {
-  const API_KEY = process.env.OPENAI_API_KEY;
+  const API_KEY = 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;
 
   // APIキーの存在を確認
   if (!API_KEY) {
