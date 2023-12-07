@@ -2,41 +2,46 @@
 async function createChatCompletion(system_message, user_message) {
   const API_KEY = process.env.OPENAI_API_KEY;
   
-
   // APIキーの存在を確認
   if (!API_KEY) {
+    console.error("OpenAI API Key is missing");
     throw new Error("OpenAI API Key is missing");
   }
 
-  const response = await fetch('https://api.openai.com/v1/chat/completions', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${API_KEY}`,
-    },
-    body: JSON.stringify({
-      model: 'gpt-3.5-turbo',
-      messages: [
-        {
-          role: 'system',
-          content: system_message,
-        },
-        {
-          role: 'user',
-          content: user_message,
-        },
-      ],
-    }),
-  });
+  try {
+    const response = await fetch('https://api.openai.com/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${API_KEY}`,
+      },
+      body: JSON.stringify({
+        model: 'gpt-3.5-turbo',
+        messages: [ 
+          {
+            role: 'system',
+            content: system_message,
+          },
+          {
+            role: 'user',
+            content: user_message,
+          },
+        ],
+      }),
+    });
 
-  const data = await response.json();
+    const data = await response.json();
 
-  if (!response.ok) {
-    // エラーメッセージを具体化
-    throw new Error(data.error?.message || `Unexpected error, status code: ${response.status}`);
+    if (!response.ok) {
+      console.error("Response Error:", data.error?.message || `Unexpected error, status code: ${response.status}`);
+      throw new Error(data.error?.message || `Unexpected error, status code: ${response.status}`);
+    }
+
+    return data;
+  } catch (error) {
+    console.error("Fetch Error:", error);
+    throw error; // またはカスタムエラーメッセージを投げる
   }
-
-  return data;
 }
 
 // ハンドラー関数
@@ -44,6 +49,7 @@ export default async function handler(req, res) {
   const { system_message, user_message } = req.body;
 
   if (!system_message || !user_message) {
+    console.error("Request Error: System and user messages are both required");
     res.status(400).json({ error: 'System and user messages are both required' });
     return;
   }
@@ -54,10 +60,11 @@ export default async function handler(req, res) {
     if (data.choices && data.choices.length > 0) {
       res.status(200).json({ text: data.choices[0].message.content.trim() });
     } else {
+      console.error("No choices in response");
       throw new Error('No choices in response');
     }
   } catch (error) {
-    // エラーメッセージを送信
+    console.error("Handler Error:", error.message);
     res.status(500).json({ error: error.message });
   }
 }
