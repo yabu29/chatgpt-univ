@@ -1,5 +1,5 @@
-// APIリクエストを行う独自の関数
-async function createChatCompletion(system_message, user_message) {
+// APIリクエストを行う独自の関数を改善
+async function improvedCreateChatCompletion(system_message, user_message) {
   const API_KEY = process.env.OPENAI_API_KEY;
   
   // APIキーの存在を確認
@@ -43,6 +43,28 @@ async function createChatCompletion(system_message, user_message) {
     throw error; // またはカスタムエラーメッセージを投げる
   }
 }
+// タイムアウトを設定する関数
+function timeout(ms) {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      reject(new Error("Request timed out after " + ms + "ms"));
+    }, ms);
+  });
+}
+
+// improvedCreateChatCompletion関数にタイムアウトを追加
+async function improvedCreateChatCompletionWithTimeout(system_message, user_message) {
+  try {
+    const result = await Promise.race([
+      improvedCreateChatCompletion(system_message, user_message),
+      timeout(30000),
+    ]);
+    return result;
+  } catch (error) {
+    console.error("Fetch Error:", error);
+    throw error;
+  }
+}
 
 // ハンドラー関数
 export default async function handler(req, res) {
@@ -55,7 +77,8 @@ export default async function handler(req, res) {
   }
 
   try {
-    const data = await createChatCompletion(system_message, user_message);
+    // ここを修正
+    const data = await improvedCreateChatCompletion(system_message, user_message);
 
     if (data.choices && data.choices.length > 0) {
       res.status(200).json({ text: data.choices[0].message.content.trim() });
