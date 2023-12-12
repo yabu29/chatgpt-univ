@@ -67,6 +67,8 @@ async function improvedCreateChatCompletionWithTimeout(system_message, user_mess
 }
 
 // ハンドラー関数
+export const maxDuration = 60;
+
 export default async function handler(req, res) {
   const { system_message, user_message } = req.body;
 
