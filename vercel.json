@@ -1,6 +1,6 @@
 {
     "functions": {
-      "api/summary.js": {
+      "pages/api/summary.js": {
         "maxDuration": 60
       }
     }
